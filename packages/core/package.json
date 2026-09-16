@@ -5,9 +5,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/formknot/formknot.git",
+    "url": "git+https://github.com/dev-saurav61295/formknot.git",
     "directory": "packages/core"
   },
+  "bugs": {
+    "url": "https://github.com/dev-saurav61295/formknot/issues"
+  },
+  "homepage": "https://github.com/dev-saurav61295/formknot#readme",
   "keywords": ["formknot", "forms", "schema", "validation", "json-schema"],
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,17 +19,27 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./package.json": "./package.json"
   },
   "files": ["dist", "README.md", "LICENSE"],
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "prepack": "npm run build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },

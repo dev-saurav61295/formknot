@@ -1,7 +1,16 @@
 {
   "name": "formknot",
   "private": true,
+  "type": "module",
   "description": "FormKnot - Connect fields, rules, and validation into dynamic forms.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-saurav61295/formknot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dev-saurav61295/formknot/issues"
+  },
+  "homepage": "https://github.com/dev-saurav61295/formknot#readme",
   "workspaces": [
     "packages/*",
     "examples/*"
@@ -14,7 +23,9 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "pack:dry-run": "npm run build && npm pack --dry-run --workspace @formknot/core --workspace @formknot/react --workspace @formknot/builder-react"
+    "pack:dry-run": "npm pack --dry-run --workspace @formknot/core --workspace @formknot/react --workspace @formknot/builder-react",
+    "smoke-test": "node scripts/smoke-test.mjs",
+    "release:check": "npm run lint && npm run typecheck && npm test && npm run build && npm run build:demo && npm run pack:dry-run"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.8",

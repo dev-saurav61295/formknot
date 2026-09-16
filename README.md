@@ -4,11 +4,15 @@
 
 FormKnot is a production-ready, schema-driven dynamic form system for React: a framework-neutral form engine, an accessible React renderer, and a visual drag-and-drop form builder, distributed as three independently publishable npm packages.
 
+**`@formknot/builder-react` is the primary, batteries-included package** — most applications install it alone and get the visual builder, the renderer, and the schema engine together. `@formknot/core` and `@formknot/react` are its supporting packages: `@formknot/core` is the framework-neutral engine everything else is built on, and `@formknot/react` is the standalone renderer for applications that only need to display schemas (no builder UI).
+
 ```text
 @formknot/core           framework-neutral schema, validation, conditional logic
 @formknot/react           accessible React renderer (FormKnotForm)
-@formknot/builder-react    visual drag-and-drop form builder (FormKnotBuilder)
+@formknot/builder-react    visual drag-and-drop form builder (FormKnotBuilder) — primary package
 ```
+
+> **Release status:** these packages have not been published to npm yet. See [Publishing instructions](#publishing-instructions) for the first-release plan, and [`CHANGELOG.md`](./CHANGELOG.md) for what the first release will contain.
 
 ## Table of contents
 
@@ -29,9 +33,11 @@ FormKnot is a production-ready, schema-driven dynamic form system for React: a f
 - [Local development](#local-development)
 - [Testing](#testing)
 - [Package builds](#package-builds)
+- [Continuous integration](#continuous-integration)
 - [Publishing instructions](#publishing-instructions)
 - [Semantic versioning](#semantic-versioning)
 - [Known limitations](#known-limitations)
+- [Contributing, security, and conduct](#contributing-security-and-conduct)
 
 ## Architecture
 
@@ -240,42 +246,58 @@ Override any custom property, or skip the stylesheet entirely and style the sema
 ## Local development
 
 ```bash
-npm install
-npm run dev          # runs the example Vite app (examples/react-demo)
-npm run build         # builds all three packages (core → react → builder-react)
-npm run test          # runs the Vitest suite across all packages
-npm run lint          # eslint .
-npm run typecheck     # tsc --noEmit in every workspace
-npm run pack:dry-run  # npm pack --dry-run for all three packages
+npm ci                # reproducible install from package-lock.json
+npm run dev            # runs the example Vite app (examples/react-demo)
+npm run lint            # eslint .
+npm run typecheck       # tsc --noEmit in every workspace — works from source, no build required first
+npm run test             # runs the Vitest suite across all packages — also works from source
+npm run build            # builds all three packages (core → react → builder-react)
+npm run build:demo        # production-builds the demo app against the built packages
+npm run pack:dry-run      # npm pack --dry-run for all three packages
+npm run smoke-test        # packs real tarballs and verifies them in an isolated consumer project
+npm run release:check     # the full non-publishing release verification sequence (see below)
 ```
+
+`npm run typecheck` and `npm run test` resolve `@formknot/core`, `@formknot/react`, and `@formknot/builder-react` to their TypeScript source (see `tsconfig.paths.json` and the `resolve.alias` entries in `vitest.config.ts`), so both work immediately after `npm ci` — no build step required first. Building is only needed to produce the `dist/` output that real consumers (and `build:demo`) resolve through each package's `exports` map.
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the full contributor workflow, including accessibility and security expectations for changes.
 
 ## Testing
 
 Tests are behavioral (Vitest + React Testing Library), not snapshot-based:
 
-- **`@formknot/core`** (56 tests): valid/invalid schemas, duplicate ids/names, every validation rule, every condition operator, `all`/`any` strategies, circular-dependency detection, serialization round-trips and migration, prototype-pollution-safe object utilities.
-- **`@formknot/react`** (13 tests): every built-in field, initial/default values, validation messages, submission, conditional show/hide/disable, async custom validation, a registered custom field, duplicate-submission prevention, `aria-describedby`/`aria-invalid` wiring.
-- **`@formknot/builder-react`** (14 tests): adding/reordering/duplicating/deleting fields, undo/redo, validation-rule and option editing, conditional-rule configuration, import/export (including invalid-JSON handling), and `onChange` schema-change events.
+- **`@formknot/core`**: valid/invalid schemas, duplicate ids/names, every validation rule, every condition operator, `all`/`any` strategies, circular-dependency detection, serialization round-trips and migration, prototype-pollution-safe object utilities.
+- **`@formknot/react`**: every built-in field, initial/default values, validation messages, submission, conditional show/hide/disable, async custom validation, a registered custom field, duplicate-submission prevention, `aria-describedby`/`aria-invalid` wiring.
+- **`@formknot/builder-react`**: adding/reordering/duplicating/deleting fields, undo/redo, validation-rule and option editing, conditional-rule configuration, import/export (including invalid-JSON handling), and `onChange` schema-change events.
 
-Run `npm run test` from the repo root, or `npm run test --workspace @formknot/core` (etc.) for a single package.
+Run `npm test` from the repo root for exact, current counts, or `npm test --workspace @formknot/core` (etc.) for a single package.
 
 ## Package builds
 
-Each package builds with `tsup` to ESM + CommonJS with type declarations, a correct `exports` map, tree-shaking (`sideEffects: false` except each package's CSS), and only ships `dist/`, `README.md`, and `LICENSE`. `npm run build` builds `@formknot/core` → `@formknot/react` → `@formknot/builder-react` in dependency order.
+Each package builds with `tsup` to ESM + CommonJS, with separate `.d.ts` (ESM) and `.d.cts` (CommonJS) type declarations resolved through a conditional `exports` map, tree-shaking (`sideEffects: false` except each package's CSS), and only ships `dist/`, `README.md`, and `LICENSE`. Each package also has a `prepack` script, so `npm pack`/`npm publish` always builds fresh output first — a package can't be packed with stale or missing `dist/`. `npm run build` builds `@formknot/core` → `@formknot/react` → `@formknot/builder-react` in dependency order.
+
+`npm run smoke-test` (`scripts/smoke-test.mjs`) packs all three packages into real tarballs and installs them into a throwaway consumer project to verify ESM `import`, CommonJS `require`, TypeScript type resolution (both module targets), stylesheet resolution (`@formknot/react/styles.css`, `@formknot/builder-react/styles.css`), and that internal FormKnot dependencies de-duplicate correctly rather than nesting a second copy. It cleans up after itself and never publishes anything.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request and every push to `main`, across the Node.js versions in the CI matrix: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run build:demo`, and `npm run pack:dry-run`. The workflow requests only `contents: read`, never runs on `pull_request_target`, and does not publish or expose any secret — there is currently no automated publish workflow.
 
 ## Publishing instructions
 
-**No package is published automatically by anything in this repository.** To publish (after review — bump versions first, see below):
+**No package is published automatically by anything in this repository or its CI.** The first release is performed manually by a maintainer, with npm two-factor authentication:
 
 ```bash
-npm run build
-npm run pack:dry-run   # sanity check tarball contents first
-npm publish --workspace @formknot/core --access public
-npm publish --workspace @formknot/react --access public
-npm publish --workspace @formknot/builder-react --access public
+npm run release:check   # lint, typecheck, test, build, build:demo, pack:dry-run — fails fast on any problem
+npm run smoke-test       # optional but recommended: verify real tarballs in an isolated consumer project
+
+# First release only — publish in dependency order, so each package's
+# published dependency range is satisfiable when the next one installs it:
+npm publish --workspace @formknot/core
+npm publish --workspace @formknot/react
+npm publish --workspace @formknot/builder-react
 ```
 
-Publish `@formknot/core` before `@formknot/react`, and `@formknot/react` before `@formknot/builder-react`, so each package's published dependency range is satisfiable. Update the placeholder `repository.url` in each package's `package.json` to your actual repository before publishing.
+`publishConfig` (`access: public`, the public npm registry) is already set in each package's `package.json`, so `npm publish` does not need an extra `--access` flag; npm will still prompt for a 2FA one-time password since the `@formknot` organization has two-factor authentication enabled. Do not run these commands as part of CI or a script — the org's 2FA requirement means the first publish of each package must be an interactive, manual step.
 
 ## Semantic versioning
 
@@ -289,6 +311,13 @@ All three packages start at `0.1.0` and version independently. Follow semver: pa
 - **Drag-and-drop into a specific canvas position.** Dragging a palette item onto the canvas always appends the new field at the end; only *reordering already-added* fields supports precise positioning (via `@dnd-kit`, or the keyboard-accessible ↑/↓ buttons).
 - **No built-in persistence.** Neither the renderer nor the builder read or write storage — wiring `onChange`/`onExport`/`onSubmit` to your backend, local storage, or file system is left to the consumer, as specified.
 - **File fields.** `type: "file"` collects `File`/`FileList` objects into form state; there is no built-in upload transport — handle the actual upload in your `onSubmit`.
+
+## Contributing, security, and conduct
+
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — repository setup, development commands, testing/accessibility/security expectations, and pull-request guidelines.
+- [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) — the Contributor Covenant, and how to report a concern.
+- [`SECURITY.md`](./SECURITY.md) — how to privately report a vulnerability.
+- [`CHANGELOG.md`](./CHANGELOG.md) — what has changed, release by release.
 
 ## License
 

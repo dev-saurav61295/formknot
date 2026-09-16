@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@formknot/core": ["./packages/core/src/index.ts"],
+      "@formknot/react": ["./packages/react/src/index.ts"],
+      "@formknot/builder-react": ["./packages/builder-react/src/index.ts"]
+    }
+  }
+}

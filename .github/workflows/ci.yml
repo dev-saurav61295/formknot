@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least-privilege default: this workflow only reads repository contents.
+# It never publishes, tags, or writes back to the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, typecheck, test, build (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Current and previous Node.js LTS lines, matching the "engines" field
+        # in package.json.
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies (clean, reproducible)
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check (from source, no prebuilt dist required)
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build packages (core -> react -> builder-react)
+        run: npm run build
+
+      - name: Build demo application
+        run: npm run build:demo
+
+      - name: Verify package tarballs (dry run only, never publishes)
+        run: npm run pack:dry-run

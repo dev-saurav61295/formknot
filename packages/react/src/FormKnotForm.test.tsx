@@ -53,7 +53,7 @@ describe("FormKnotForm built-in fields", () => {
     expect((screen.getByLabelText("Plan") as HTMLSelectElement).value).toBe("pro");
   });
 
-  it("renders a radio group inside a fieldset/legend", () => {
+  it("renders a radio group inside a fieldset/legend", async () => {
     render(
       <FormKnotForm
         schema={schema([
@@ -70,7 +70,7 @@ describe("FormKnotForm built-in fields", () => {
         ])}
       />
     );
-    const group = screen.getByRole("group", { name: "Size" });
+    const group = await screen.findByRole("group", { name: "Size" });
     expect(within(group).getByLabelText("Small")).toBeInTheDocument();
     expect(within(group).getByLabelText("Large")).toBeInTheDocument();
   });
@@ -102,19 +102,19 @@ describe("FormKnotForm built-in fields", () => {
     expect(onSubmit.mock.calls[0][0].data.toppings.sort()).toEqual(["cheese", "olives"]);
   });
 
-  it("applies initialValues and defaultValue", () => {
+  it("applies initialValues and defaultValue", async () => {
     render(
       <FormKnotForm
         schema={schema([{ id: "f1", type: "text", name: "city", label: "City", defaultValue: "Default City" }])}
         initialValues={{ city: "Initial City" }}
       />
     );
-    expect((screen.getByLabelText("City") as HTMLInputElement).value).toBe("Initial City");
+    expect(await screen.findByLabelText("City")).toHaveValue("Initial City");
   });
 
-  it("falls back to defaultValue when no initialValues override it", () => {
+  it("falls back to defaultValue when no initialValues override it", async () => {
     render(<FormKnotForm schema={schema([{ id: "f1", type: "text", name: "city", label: "City", defaultValue: "Default City" }])} />);
-    expect((screen.getByLabelText("City") as HTMLInputElement).value).toBe("Default City");
+    expect(await screen.findByLabelText("City")).toHaveValue("Default City");
   });
 });
 
@@ -252,7 +252,7 @@ describe("FormKnotForm custom fields", () => {
     );
   }
 
-  it("renders a registered custom field component", () => {
+  it("renders a registered custom field component", async () => {
     const registry = createFormKnotFieldRegistry();
     registry.register("currency", { component: CurrencyInput as never });
     render(
@@ -261,6 +261,6 @@ describe("FormKnotForm custom fields", () => {
         components={registry}
       />
     );
-    expect(screen.getByTestId("currency-input")).toBeInTheDocument();
+    expect(await screen.findByTestId("currency-input")).toBeInTheDocument();
   });
 });

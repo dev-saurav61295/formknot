@@ -42,6 +42,10 @@ export function FormDesigner() {
 
 `@formknot/core` and `@formknot/react` are ordinary `dependencies` of `@formknot/builder-react` (not peers), so a consumer who only wants the builder can install this one package and get a working experience, matching the install instructions above. `react`/`react-dom` stay `peerDependencies` since only one copy of React may exist in a host application.
 
+## Part of the FormKnot monorepo
+
+This is the primary FormKnot package, published from [dev-saurav61295/formknot](https://github.com/dev-saurav61295/formknot) alongside its supporting packages `@formknot/core` and `@formknot/react`. See the [root README](https://github.com/dev-saurav61295/formknot#readme) for the full architecture and [`CONTRIBUTING.md`](https://github.com/dev-saurav61295/formknot/blob/main/CONTRIBUTING.md) to contribute.
+
 ## License
 
 MIT

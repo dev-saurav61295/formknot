@@ -33,6 +33,10 @@ const { valid, errors } = validateFormKnotSchema(schema);
 const result = await validateFormData(schema, { email: "not-an-email" });
 ```
 
+## Part of the FormKnot monorepo
+
+This package is published from [dev-saurav61295/formknot](https://github.com/dev-saurav61295/formknot), alongside `@formknot/react` and `@formknot/builder-react`. See the [root README](https://github.com/dev-saurav61295/formknot#readme) for the full architecture and [`CONTRIBUTING.md`](https://github.com/dev-saurav61295/formknot/blob/main/CONTRIBUTING.md) to contribute.
+
 ## License
 
 MIT

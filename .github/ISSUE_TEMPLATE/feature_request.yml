@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest an enhancement to a FormKnot package
+labels: ["enhancement", "triage"]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected package
+      options:
+        - "@formknot/core"
+        - "@formknot/react"
+        - "@formknot/builder-react"
+        - Demo app / documentation
+        - Not sure / new package
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve
+      description: What are you trying to do that FormKnot doesn't support today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >
+        Sketch the API you'd expect (a schema snippet, a prop, a new export). It doesn't need to be final.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Would this require a breaking change?
+      options:
+        - "No — additive only"
+        - "Yes — changes an existing public API or schema shape"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds you're using today, or other approaches you considered.
+    validations:
+      required: false

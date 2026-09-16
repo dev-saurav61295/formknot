@@ -5,9 +5,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/formknot/formknot.git",
+    "url": "git+https://github.com/dev-saurav61295/formknot.git",
     "directory": "packages/react"
   },
+  "bugs": {
+    "url": "https://github.com/dev-saurav61295/formknot/issues"
+  },
+  "homepage": "https://github.com/dev-saurav61295/formknot#readme",
   "keywords": ["formknot", "forms", "react", "react-hook-form", "accessibility"],
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,23 +19,33 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./styles.css": "./dist/styles.css",
     "./package.json": "./package.json"
   },
   "files": ["dist", "README.md", "LICENSE"],
   "sideEffects": ["**/*.css"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "test": "vitest run"
   },
   "dependencies": {
-    "@formknot/core": "0.1.0",
+    "@formknot/core": "^0.1.0",
     "react-hook-form": "^7.52.2"
   },
   "peerDependencies": {

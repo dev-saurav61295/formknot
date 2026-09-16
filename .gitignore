@@ -1,7 +1,23 @@
 node_modules/
 dist/
 *.tsbuildinfo
-.DS_Store
 coverage/
 *.log
 .vite/
+
+# Packed tarballs (never committed; produced by npm pack / pack:dry-run / smoke-test)
+*.tgz
+
+# Environment / secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Editor / OS metadata
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# npm diagnostics
+npm-debug.log*
