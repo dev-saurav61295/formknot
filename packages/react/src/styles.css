@@ -1,0 +1,177 @@
+/**
+ * Optional default stylesheet for @formknot/react.
+ * Import explicitly via `import "@formknot/react/styles.css"`.
+ * Override any --formknot-* custom property to retheme without touching markup.
+ */
+.formknot-form {
+  --formknot-color-text: #1a1a1a;
+  --formknot-color-muted: #6b7280;
+  --formknot-color-border: #d1d5db;
+  --formknot-color-border-focus: #2563eb;
+  --formknot-color-error: #b91c1c;
+  --formknot-color-error-bg: #fef2f2;
+  --formknot-color-bg: #ffffff;
+  --formknot-radius: 6px;
+  --formknot-spacing: 0.75rem;
+  --formknot-font-size: 0.9375rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--formknot-spacing);
+  color: var(--formknot-color-text);
+  font-size: var(--formknot-font-size);
+  background: var(--formknot-color-bg);
+}
+
+.formknot-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.formknot-field-group {
+  border: 1px solid var(--formknot-color-border);
+  border-radius: var(--formknot-radius);
+  padding: var(--formknot-spacing);
+}
+
+.formknot-label,
+.formknot-legend {
+  font-weight: 600;
+}
+
+.formknot-required-indicator {
+  color: var(--formknot-color-error);
+}
+
+.formknot-field-description {
+  margin: 0;
+  color: var(--formknot-color-muted);
+  font-size: 0.85em;
+}
+
+.formknot-input,
+.formknot-textarea,
+.formknot-select {
+  font: inherit;
+  color: inherit;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--formknot-color-border);
+  border-radius: var(--formknot-radius);
+  background: var(--formknot-color-bg);
+}
+
+.formknot-input:focus-visible,
+.formknot-textarea:focus-visible,
+.formknot-select:focus-visible,
+.formknot-checkbox:focus-visible,
+.formknot-file:focus-visible,
+input[type="radio"]:focus-visible,
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--formknot-color-border-focus);
+  outline-offset: 1px;
+}
+
+.formknot-input[aria-invalid="true"],
+.formknot-textarea[aria-invalid="true"],
+.formknot-select[aria-invalid="true"] {
+  border-color: var(--formknot-color-error);
+}
+
+.formknot-radio-group,
+.formknot-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.formknot-radio-option,
+.formknot-checkbox-option,
+.formknot-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.formknot-field-checkbox {
+  flex-direction: column;
+}
+
+.formknot-field-errors {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--formknot-color-error);
+  font-size: 0.85em;
+}
+
+.formknot-field-unknown {
+  padding: var(--formknot-spacing);
+  border: 1px dashed var(--formknot-color-error);
+  border-radius: var(--formknot-radius);
+  color: var(--formknot-color-error);
+}
+
+.formknot-error-summary {
+  border: 1px solid var(--formknot-color-error);
+  background: var(--formknot-color-error-bg);
+  border-radius: var(--formknot-radius);
+  padding: var(--formknot-spacing);
+}
+
+.formknot-error-summary-title {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--formknot-color-error);
+}
+
+.formknot-error-summary ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.formknot-error-summary-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--formknot-color-error);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.formknot-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.formknot-submit,
+.formknot-reset {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border-radius: var(--formknot-radius);
+  border: 1px solid var(--formknot-color-border);
+  cursor: pointer;
+}
+
+.formknot-submit {
+  background: var(--formknot-color-border-focus);
+  color: white;
+  border-color: var(--formknot-color-border-focus);
+}
+
+.formknot-submit:disabled,
+.formknot-reset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formknot-reset {
+  background: transparent;
+  color: var(--formknot-color-text);
+}

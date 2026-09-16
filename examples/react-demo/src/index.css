@@ -1,0 +1,102 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app-header h1 {
+  margin: 0;
+}
+
+.app-tagline {
+  margin: 0.25rem 0 1rem;
+  color: #4b5563;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-tabs button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.app-tabs button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.app-hint {
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.app-render-section {
+  max-width: 640px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.app-submission-result {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+}
+
+.app-submission-result pre {
+  overflow-x: auto;
+  font-size: 0.8125rem;
+}
+
+.currency-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.currency-field-symbol {
+  padding: 0.5rem 0.625rem;
+  background: #f3f4f6;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #4b5563;
+}
+
+.currency-field-input {
+  border: none;
+  padding: 0.5rem 0.625rem;
+  flex: 1;
+  font: inherit;
+}
+
+.currency-field-input:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
