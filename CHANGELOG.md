@@ -10,7 +10,7 @@ three packages move together during initial development.
 
 ## [0.1.0] - 2026-09-16
 
-These packages have **not yet been published to npm**. This entry describes
+Version 0.1.0 is the initial public release of the FormKnot packages on npm. This entry describes
 the capabilities that will ship in the first public release, once
 `npm run release:check` passes and a maintainer publishes manually with
 two-factor authentication.
