@@ -8,7 +8,7 @@ of `@formknot/core`, `@formknot/react`, and `@formknot/builder-react` is
 versioned independently once published, but shares this changelog while the
 three packages move together during initial development.
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-09-16
 
 These packages have **not yet been published to npm**. This entry describes
 the capabilities that will ship in the first public release, once
