@@ -318,6 +318,16 @@
   margin-top: 0.75rem;
 }
 
+.formknot-builder-modal-actions button {
+  font: inherit;
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--formknot-builder-border);
+  border-radius: var(--formknot-builder-radius);
+  background: var(--formknot-builder-bg);
+  cursor: pointer;
+}
+
 .formknot-builder-json-output,
 .formknot-builder-json-input {
   width: 100%;
