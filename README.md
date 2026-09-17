@@ -160,6 +160,7 @@ This starts `examples/react-demo` (see [Local development](#local-development) f
 
 ```tsx
 import { FormKnotBuilder } from "@formknot/builder-react";
+import "@formknot/react/styles.css";
 import "@formknot/builder-react/styles.css";
 
 export function FormDesigner() {
@@ -171,6 +172,8 @@ export function FormDesigner() {
   );
 }
 ```
+
+Both stylesheets are required: `@formknot/builder-react/styles.css` styles the builder chrome (palette, canvas, settings panel), while `@formknot/react/styles.css` styles the live preview panel, which renders an actual `FormKnotForm` internally. Omitting the second import leaves the preview looking unstyled even though the rest of the builder looks fine.
 
 `FormKnotBuilder` renders four areas — **field palette**, **canvas**, **settings panel**, and **live preview** — and supports clicking or dragging fields onto the canvas, drag (`@dnd-kit`, keyboard-operable) or ↑/↓-button reordering, selection, duplication, delete-with-confirmation, attribute/validation/option/conditional-rule editing, undo/redo, and JSON import/export (paste, upload, copy-to-clipboard, download). `onChange` fires only with a schema that currently passes `validateFormKnotSchema` — an in-progress, momentarily invalid edit never reaches your state. The builder does not persist anything; storing the schema is your application's responsibility.
 
