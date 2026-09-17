@@ -1,8 +1,22 @@
 # FormKnot
 
-**Connect fields, rules, and validation into dynamic forms.**
+**Build dynamic React forms from JSON schemas.**
 
-FormKnot is a production-ready, schema-driven dynamic form system for React: a framework-neutral form engine, an accessible React renderer, and a visual drag-and-drop form builder, distributed as three independently publishable npm packages.
+[Quick start](#quick-start) · [Try it locally](#try-it-locally) · [Documentation](#table-of-contents) · [npm](https://www.npmjs.com/package/@formknot/builder-react) · [GitHub](https://github.com/dev-saurav61295/formknot)
+
+FormKnot is a production-ready, schema-driven dynamic form system for React: design a form visually, render it accessibly, and validate it identically on the client and the server — all from one JSON schema, distributed as three independently publishable npm packages.
+
+> **Latest release:** [v0.1.0](https://www.npmjs.com/package/@formknot/builder-react) — now available on npm.
+
+## Why FormKnot?
+
+- **One schema, one source of truth.** The same JSON schema drives the visual builder, the rendered form, and server-side validation, so an editor's configuration and what actually validates can never drift apart.
+- **Accessible by default.** Every built-in field wires `aria-describedby`/`aria-invalid`, focuses the first invalid field on a failed submission, and renders an accessible error summary — without you writing any of that yourself.
+- **Framework-neutral validation core.** `@formknot/core` has zero React or DOM dependency, so the exact validation and conditional-logic rules that run in the browser also run in Node, a CLI, or a server action.
+- **Declarative conditional logic.** Show/hide/enable/disable rules live in the schema and evaluate purely, with circular-dependency detection at validation time — no manual re-render wiring.
+- **Extensible.** Register custom field components and custom validators (sync or async) without forking the renderer or the builder.
+
+## Packages
 
 **`@formknot/builder-react` is the primary, batteries-included package** — most applications install it alone and get the visual builder, the renderer, and the schema engine together. `@formknot/core` and `@formknot/react` are its supporting packages: `@formknot/core` is the framework-neutral engine everything else is built on, and `@formknot/react` is the standalone renderer for applications that only need to display schemas (no builder UI).
 
@@ -11,68 +25,6 @@ FormKnot is a production-ready, schema-driven dynamic form system for React: a f
 @formknot/react           accessible React renderer (FormKnotForm)
 @formknot/builder-react    visual drag-and-drop form builder (FormKnotBuilder) — primary package
 ```
-
-> **Latest release:** v0.1.0 — now available on npm.
->
-> Install the primary package:
->
-> ```bash
-> npm install @formknot/builder-react
-> ```
-
-## Table of contents
-
-- [Architecture](#architecture)
-- [Package responsibilities](#package-responsibilities)
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [Builder usage](#builder-usage)
-- [Renderer usage](#renderer-usage)
-- [Schema format](#schema-format)
-- [Built-in fields](#built-in-fields)
-- [Validation](#validation)
-- [Conditional logic](#conditional-logic)
-- [Custom validators](#custom-validators)
-- [Custom fields](#custom-fields)
-- [Styling](#styling)
-- [Import and export](#import-and-export)
-- [Local development](#local-development)
-- [Testing](#testing)
-- [Package builds](#package-builds)
-- [Continuous integration](#continuous-integration)
-- [Publishing instructions](#publishing-instructions)
-- [Semantic versioning](#semantic-versioning)
-- [Known limitations](#known-limitations)
-- [Contributing, security, and conduct](#contributing-security-and-conduct)
-
-## Architecture
-
-```
-┌─────────────────────┐
-│ @formknot/builder-react │  visual builder (palette, canvas, settings, preview)
-│  depends on ↓            │
-├─────────────────────┤
-│ @formknot/react          │  FormKnotForm, built-in field components, RHF integration
-│  depends on ↓            │
-├─────────────────────┤
-│ @formknot/core           │  schema types, AJV validation, conditions, migrations
-│  (no React, no DOM)      │
-└─────────────────────┘
-```
-
-`@formknot/core` owns the `FormKnotSchema` JSON model and every rule that can be expressed about it: structural validation (AJV + semantic checks), form-data validation, conditional-visibility evaluation, versioning/migration, and safe (de)serialization. It has zero React or browser dependency, so the same validation logic can run on a Node server, in a CLI, or in the browser.
-
-`@formknot/react` renders a `FormKnotSchema` as a real, accessible form using [react-hook-form](https://react-hook-form.com) for field state and a resolver that calls straight into `@formknot/core`'s `validateFormData`, so the renderer and any non-React consumer of `@formknot/core` validate identically.
-
-`@formknot/builder-react` is a visual editor built on top of both: it holds an immutable, undo/redo-able schema in a reducer, and renders its live preview with an actual `FormKnotForm`.
-
-## Package responsibilities
-
-| Package | Responsibility |
-|---|---|
-| `@formknot/core` | Types, schema validation, data validation, conditional-logic evaluation, validator/field registries, migrations, safe (de)serialization. |
-| `@formknot/react` | `FormKnotForm`, built-in field components, RHF integration, accessible error summary/field errors, custom field registry, optional stylesheet. |
-| `@formknot/builder-react` | `FormKnotBuilder`: palette, canvas (drag + keyboard reorder), settings panel (attributes/validation/options/conditions), live preview, undo/redo, JSON import/export. |
 
 ## Installation
 
@@ -123,6 +75,86 @@ export function ContactForm() {
   );
 }
 ```
+
+## Try it locally
+
+To see all three packages working together — visual builder, renderer, conditional logic, and a custom field — clone the repo and run the bundled demo app:
+
+```bash
+git clone https://github.com/dev-saurav61295/formknot.git
+cd formknot
+npm ci
+npm run dev
+```
+
+This starts `examples/react-demo` (see [Local development](#local-development) for the full command list).
+
+## Features
+
+- **12 built-in field types** — text, textarea, email, password, number, select, radio, checkbox, checkbox group, date, file, hidden. See [Built-in fields](#built-in-fields).
+- **Validation** — required, email, length, min/max, pattern, and sync/async custom rules, identical on client and server. See [Validation](#validation).
+- **Conditional logic** — show/hide/enable/disable rules with circular-dependency detection. See [Conditional logic](#conditional-logic).
+- **Visual builder** — drag-and-drop (keyboard-accessible), undo/redo, JSON import/export. See [Builder usage](#builder-usage).
+- **Custom fields and validators** — register your own components and async validators. See [Custom fields](#custom-fields) and [Custom validators](#custom-validators).
+- **Themeable** — CSS custom properties, no heavy visual opinion. See [Styling](#styling).
+
+## Table of contents
+
+- [Why FormKnot?](#why-formknot)
+- [Packages](#packages)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Try it locally](#try-it-locally)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Package responsibilities](#package-responsibilities)
+- [Builder usage](#builder-usage)
+- [Renderer usage](#renderer-usage)
+- [Schema format](#schema-format)
+- [Built-in fields](#built-in-fields)
+- [Validation](#validation)
+- [Conditional logic](#conditional-logic)
+- [Custom validators](#custom-validators)
+- [Custom fields](#custom-fields)
+- [Styling](#styling)
+- [Import and export](#import-and-export)
+- [Local development](#local-development)
+- [Testing](#testing)
+- [Package builds](#package-builds)
+- [Continuous integration](#continuous-integration)
+- [Publishing instructions](#publishing-instructions)
+- [Semantic versioning](#semantic-versioning)
+- [Known limitations](#known-limitations)
+- [Contributing, security, and conduct](#contributing-security-and-conduct)
+
+## Architecture
+
+```
+┌─────────────────────┐
+│ @formknot/builder-react │  visual builder (palette, canvas, settings, preview)
+│  depends on ↓            │
+├─────────────────────┤
+│ @formknot/react          │  FormKnotForm, built-in field components, RHF integration
+│  depends on ↓            │
+├─────────────────────┤
+│ @formknot/core           │  schema types, AJV validation, conditions, migrations
+│  (no React, no DOM)      │
+└─────────────────────┘
+```
+
+`@formknot/core` owns the `FormKnotSchema` JSON model and every rule that can be expressed about it: structural validation (AJV + semantic checks), form-data validation, conditional-visibility evaluation, versioning/migration, and safe (de)serialization. It has zero React or browser dependency, so the same validation logic can run on a Node server, in a CLI, or in the browser.
+
+`@formknot/react` renders a `FormKnotSchema` as a real, accessible form using [react-hook-form](https://react-hook-form.com) for field state and a resolver that calls straight into `@formknot/core`'s `validateFormData`, so the renderer and any non-React consumer of `@formknot/core` validate identically.
+
+`@formknot/builder-react` is a visual editor built on top of both: it holds an immutable, undo/redo-able schema in a reducer, and renders its live preview with an actual `FormKnotForm`.
+
+## Package responsibilities
+
+| Package | Responsibility |
+|---|---|
+| `@formknot/core` | Types, schema validation, data validation, conditional-logic evaluation, validator/field registries, migrations, safe (de)serialization. |
+| `@formknot/react` | `FormKnotForm`, built-in field components, RHF integration, accessible error summary/field errors, custom field registry, optional stylesheet. |
+| `@formknot/builder-react` | `FormKnotBuilder`: palette, canvas (drag + keyboard reorder), settings panel (attributes/validation/options/conditions), live preview, undo/redo, JSON import/export. |
 
 ## Builder usage
 
