@@ -12,7 +12,13 @@ FormKnot is a production-ready, schema-driven dynamic form system for React: a f
 @formknot/builder-react    visual drag-and-drop form builder (FormKnotBuilder) — primary package
 ```
 
-> **Release status:** these packages have not been published to npm yet. See [Publishing instructions](#publishing-instructions) for the first-release plan, and [`CHANGELOG.md`](./CHANGELOG.md) for what the first release will contain.
+> **Latest release:** v0.1.0 — now available on npm.
+>
+> Install the primary package:
+>
+> ```bash
+> npm install @formknot/builder-react
+> ```
 
 ## Table of contents
 
