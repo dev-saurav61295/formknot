@@ -8,6 +8,15 @@ of `@formknot/core`, `@formknot/react`, and `@formknot/builder-react` is
 versioned independently once published, but shares this changelog while the
 three packages move together during initial development.
 
+## [0.1.1] - 2026-09-17
+
+### Fixed
+
+- **`@formknot/builder-react`**: the delete-confirmation modal's Cancel button had no
+  base styling (it fell back to raw browser-default chrome), so it visually
+  mismatched the Delete button next to it. Added the missing button styling for
+  the modal's action row.
+
 ## [0.1.0] - 2026-09-16
 
 Version 0.1.0 is the initial public release of the FormKnot packages on npm. This entry describes
