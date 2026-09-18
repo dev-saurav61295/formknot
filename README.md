@@ -6,7 +6,7 @@
 
 FormKnot is a production-ready, schema-driven dynamic form system for React: design a form visually, render it accessibly, and validate it identically on the client and the server — all from one JSON schema, distributed as three independently publishable npm packages.
 
-> **Latest release:** [v0.1.0](https://www.npmjs.com/package/@formknot/builder-react) — now available on npm.
+> **Latest release:** [`@formknot/builder-react@0.1.1`](https://www.npmjs.com/package/@formknot/builder-react) · [`@formknot/react@0.1.1`](https://www.npmjs.com/package/@formknot/react) · [`@formknot/core@0.1.0`](https://www.npmjs.com/package/@formknot/core) — see [CHANGELOG.md](./CHANGELOG.md) for what changed in each release.
 
 ## Why FormKnot?
 
