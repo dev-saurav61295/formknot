@@ -145,6 +145,11 @@ export function FormKnotForm(props: FormKnotFormProps) {
     values: typeof children === "function" ? (watch() as Record<string, unknown>) : {},
   };
 
+  const hasVisibleInteractiveField = schema.fields.some((field) => {
+    if (field.type === "hidden") return false;
+    return conditionStates[field.name]?.visible ?? true;
+  });
+
   return (
     <form
       id={id}
@@ -207,15 +212,18 @@ export function FormKnotForm(props: FormKnotFormProps) {
 
       {typeof children === "function" ? (
         children(formState)
-      ) : children ?? (
-        <div className="formknot-actions">
-          <button type="submit" className="formknot-submit" disabled={isSubmitting}>
-            {schema.settings?.submitButtonLabel ?? "Submit"}
-          </button>
-          <button type="button" className="formknot-reset" onClick={() => reset()} disabled={isSubmitting}>
-            {schema.settings?.resetButtonLabel ?? "Reset"}
-          </button>
-        </div>
+      ) : (
+        children ??
+        (hasVisibleInteractiveField && (
+          <div className="formknot-actions">
+            <button type="submit" className="formknot-submit" disabled={isSubmitting}>
+              {schema.settings?.submitButtonLabel ?? "Submit"}
+            </button>
+            <button type="button" className="formknot-reset" onClick={() => reset()} disabled={isSubmitting}>
+              {schema.settings?.resetButtonLabel ?? "Reset"}
+            </button>
+          </div>
+        ))
       )}
     </form>
   );

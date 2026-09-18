@@ -116,6 +116,27 @@ describe("FormKnotForm built-in fields", () => {
     render(<FormKnotForm schema={schema([{ id: "f1", type: "text", name: "city", label: "City", defaultValue: "Default City" }])} />);
     expect(await screen.findByLabelText("City")).toHaveValue("Default City");
   });
+
+  it("hides the default Submit/Reset actions when the schema has only hidden fields", async () => {
+    render(<FormKnotForm schema={schema([{ id: "f1", type: "hidden", name: "trackingId", label: "Tracking ID", defaultValue: "abc" }])} />);
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: "Submit" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Reset" })).not.toBeInTheDocument();
+    });
+  });
+
+  it("shows the default Submit/Reset actions once a visible field exists alongside a hidden one", async () => {
+    render(
+      <FormKnotForm
+        schema={schema([
+          { id: "f1", type: "hidden", name: "trackingId", label: "Tracking ID", defaultValue: "abc" },
+          { id: "f2", type: "text", name: "name", label: "Name" },
+        ])}
+      />
+    );
+    expect(await screen.findByRole("button", { name: "Submit" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+  });
 });
 
 describe("FormKnotForm validation", () => {
