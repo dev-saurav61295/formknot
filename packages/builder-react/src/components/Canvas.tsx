@@ -63,7 +63,7 @@ export function Canvas({ fields, selectedFieldId, onSelect, onDuplicate, onReque
       {fields.length === 0 ? (
         <p className="formknot-builder-empty-state">Add a field from the palette to get started.</p>
       ) : (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} autoScroll={false}>
           <SortableContext items={fields.map((f) => f.id)} strategy={verticalListSortingStrategy}>
             <ul className="formknot-builder-field-list">
               {fields.map((field, index) => (

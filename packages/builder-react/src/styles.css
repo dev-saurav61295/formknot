@@ -248,6 +248,12 @@
   gap: 0.5rem;
 }
 
+.formknot-builder-setting-error {
+  color: var(--formknot-builder-danger);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
 .formknot-builder-option-row,
 .formknot-builder-rule-row {
   display: flex;

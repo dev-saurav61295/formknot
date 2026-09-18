@@ -16,7 +16,7 @@ export function PreviewPane({ schema, validators, components }: PreviewPaneProps
         <p className="formknot-builder-empty-state">Your form preview will appear here once you add fields.</p>
       ) : (
         <FormKnotForm
-          key={schema.fields.map((f) => f.id).join(",")}
+          key={schema.fields.map((f) => `${f.id}:${JSON.stringify(f.defaultValue)}`).join(",")}
           schema={schema}
           validators={validators}
           components={components}

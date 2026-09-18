@@ -166,4 +166,80 @@ describe("FormKnotBuilder", () => {
     const preview = screen.getByRole("region", { name: "Live preview" });
     await waitFor(() => expect(within(preview).getByText("New field")).toBeInTheDocument());
   });
+
+  it("hides the preview's Submit/Reset actions when the only field is Hidden", async () => {
+    const user = userEvent.setup();
+    render(<FormKnotBuilder />);
+    await user.click(screen.getByRole("button", { name: "Hidden" }));
+    const preview = screen.getByRole("region", { name: "Live preview" });
+    expect(within(preview).queryByRole("button", { name: "Submit" })).not.toBeInTheDocument();
+    expect(within(preview).queryByRole("button", { name: "Reset" })).not.toBeInTheDocument();
+  });
+
+  it("rejects an invalid CSS class name and does not commit it to the schema", async () => {
+    const user = userEvent.setup();
+    render(<FormKnotBuilder />);
+    await user.click(screen.getByRole("button", { name: "Text" }));
+    await user.click(within(getCanvas()).getByText("New field"));
+
+    const classInput = screen.getByLabelText("CSS class name");
+    await user.type(classInput, "123invalid");
+    await user.tab();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/not a valid CSS class name/);
+
+    const preview = screen.getByRole("region", { name: "Live preview" });
+    const previewInput = within(preview).getByLabelText("New field");
+    expect(previewInput.closest(".formknot-field")).not.toHaveClass("123invalid");
+  });
+
+  it("accepts a valid CSS class name", async () => {
+    const user = userEvent.setup();
+    render(<FormKnotBuilder />);
+    await user.click(screen.getByRole("button", { name: "Text" }));
+    await user.click(within(getCanvas()).getByText("New field"));
+
+    const classInput = screen.getByLabelText("CSS class name");
+    await user.type(classInput, "highlight-field");
+    await user.tab();
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    const preview = screen.getByRole("region", { name: "Live preview" });
+    await waitFor(() => {
+      const previewInput = within(preview).getByLabelText("New field");
+      expect(previewInput.closest(".formknot-field")).toHaveClass("highlight-field");
+    });
+  });
+
+  it("prevents Required and Disabled from both being enabled on the same field", async () => {
+    const user = userEvent.setup();
+    render(<FormKnotBuilder />);
+    await user.click(screen.getByRole("button", { name: "Text" }));
+    await user.click(within(getCanvas()).getByText("New field"));
+
+    await user.click(screen.getByLabelText("Required"));
+    expect(screen.getByLabelText("Required")).toBeChecked();
+
+    await user.click(screen.getByLabelText("Disabled"));
+    expect(screen.getByLabelText("Disabled")).toBeChecked();
+    expect(screen.getByLabelText("Required")).not.toBeChecked();
+
+    await user.click(screen.getByLabelText("Required"));
+    expect(screen.getByLabelText("Required")).toBeChecked();
+    expect(screen.getByLabelText("Disabled")).not.toBeChecked();
+  });
+
+  it("reflects a Default Value change in the live preview without adding or removing fields", async () => {
+    const user = userEvent.setup();
+    render(<FormKnotBuilder />);
+    await user.click(screen.getByRole("button", { name: "Text" }));
+    await user.click(within(getCanvas()).getByText("New field"));
+
+    const defaultValueInput = screen.getByLabelText("Default value");
+    await user.type(defaultValueInput, "Hello Default");
+    await user.tab();
+
+    const preview = screen.getByRole("region", { name: "Live preview" });
+    await waitFor(() => expect(within(preview).getByLabelText("New field")).toHaveValue("Hello Default"));
+  });
 });

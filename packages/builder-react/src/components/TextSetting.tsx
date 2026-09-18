@@ -7,17 +7,28 @@ export interface TextSettingProps {
   onCommit: (value: string) => void;
   type?: "text" | "number";
   textarea?: boolean;
+  /** Returns an error message for an invalid draft, or undefined when the draft is valid. Invalid drafts are not committed. */
+  validate?: (draft: string) => string | undefined;
 }
 
 /** A settings-panel text input that commits to the reducer on blur/Enter rather than every keystroke, keeping undo history usable. */
-export function TextSetting({ id, label, value, onCommit, type = "text", textarea = false }: TextSettingProps) {
+export function TextSetting({ id, label, value, onCommit, type = "text", textarea = false, validate }: TextSettingProps) {
   const [draft, setDraft] = useState(value);
+  const [error, setError] = useState<string | undefined>(undefined);
 
-  useEffect(() => setDraft(value), [value]);
+  useEffect(() => {
+    setDraft(value);
+    setError(undefined);
+  }, [value]);
 
   const commit = () => {
+    const validationError = validate?.(draft);
+    setError(validationError);
+    if (validationError) return;
     if (draft !== value) onCommit(draft);
   };
+
+  const errorId = `${id}-error`;
 
   return (
     <div className="formknot-builder-setting">
@@ -28,6 +39,8 @@ export function TextSetting({ id, label, value, onCommit, type = "text", textare
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           onBlur={commit}
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={error ? errorId : undefined}
         />
       ) : (
         <input
@@ -42,7 +55,14 @@ export function TextSetting({ id, label, value, onCommit, type = "text", textare
               commit();
             }
           }}
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={error ? errorId : undefined}
         />
+      )}
+      {error && (
+        <p id={errorId} className="formknot-builder-setting-error" role="alert">
+          {error}
+        </p>
       )}
     </div>
   );
