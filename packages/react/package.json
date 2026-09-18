@@ -1,6 +1,6 @@
 {
   "name": "@formknot/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Accessible React renderer for FormKnot dynamic form schemas.",
   "license": "MIT",
   "repository": {

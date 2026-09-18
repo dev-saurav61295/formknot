@@ -8,7 +8,7 @@ of `@formknot/core`, `@formknot/react`, and `@formknot/builder-react` is
 versioned independently once published, but shares this changelog while the
 three packages move together during initial development.
 
-## [0.1.1] - 2026-09-17
+## [0.1.1] - 2026-09-18
 
 ### Fixed
 
@@ -16,6 +16,25 @@ three packages move together during initial development.
   base styling (it fell back to raw browser-default chrome), so it visually
   mismatched the Delete button next to it. Added the missing button styling for
   the modal's action row.
+- **`@formknot/react`**: `FormKnotForm`'s default Submit/Reset actions rendered even
+  when the schema had no visible, interactive field (e.g. a schema made up only of
+  `hidden` fields, or every field hidden by a condition). The default actions now
+  only render when at least one non-hidden field is currently visible.
+- **`@formknot/builder-react`**: the "CSS class name" field setting accepted any
+  string, including digits-only values that aren't usable CSS class names. It now
+  validates the value and shows an inline error instead of committing an invalid
+  class name to the schema.
+- **`@formknot/builder-react`**: a field could have both Required and Disabled
+  enabled at once, a contradictory state for form consumers to handle. Enabling
+  either setting now clears the other.
+- **`@formknot/builder-react`**: editing a field's Default Value in the settings
+  panel didn't reach the live preview unless a field was also added or removed,
+  because the preview only remounted on a field-id-set change and
+  `react-hook-form` only applies `defaultValues` at mount. The preview now also
+  remounts when a field's default value changes.
+- **`@formknot/builder-react`**: dragging a field in the canvas auto-scrolled the
+  whole page via dnd-kit's default window-level auto-scroll. Auto-scroll is now
+  disabled on the canvas's drag context.
 
 ## [0.1.0] - 2026-09-16
 
